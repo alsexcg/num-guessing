@@ -1,51 +1,71 @@
-
 import random
-random_int = random.randint(1, 100)
+import time
+high_score = {"Easy": None, "Medium": None, "Hard": None }
+while True:
+    random_int = random.randint(1, 10)
 
-start = \
-    (print("""Welcome to my game!,
-Once we start I'll generate a random number between 1 and 100 which you will guess!,
-You have a set number of chances to guess."""))
+    print("""Welcome to my game!
+Once we start, I'll generate a random number between 1 and 100 which you will guess!
+You have a set number of chances to guess.""")
 
-difficulty =(input
-             (("""Please select your difficulty level:
+    difficulty = input("""Please select your difficulty level:
       1) Easy (10 chances)
       2) Medium (5 chances)
       3) Hard (3 chances)
-      Enter your choice: """
-               )))
+      Enter your choice: """)
 
-
-if difficulty == "1":
-    chances = 10
-    level = "Easy"
-elif difficulty == "2":
-    chances = 5
-    level = "Medium"
-elif difficulty == "3":
-    chances = 3
-    level = "Hard"
-else:
-    print("Invalid choice! Defaulting to easy mode.")
-    chances = 10
-    level = "Easy"
-
-print(f"You have selected {level} difficulty you will have {chances:,} chances.")
-
-guesses_taken = 0
-
-while chances > 0:
-    guess = int(input("Enter your guess (MUST BE A NUMBER): "))
-    guesses_taken += 1
-    if guess == random_int:
-        print(f"""You guessed the correct number!"""
-        f""" The number was {random_int} It took you {guesses_taken} chances to guess the correct number.""")
-        break
+    if difficulty == "1":
+        chances = 10
+        level = "Easy"
+    elif difficulty == "2":
+        chances = 5
+        level = "Medium"
+    elif difficulty == "3":
+        chances = 3
+        level = "Hard"
     else:
-        chances -= 1
-        if chances == 1:
-            print("Incorrect this is your final guess!")
+        print("Invalid choice! Defaulting to easy mode.")
+        chances = 10
+        level = "Easy"
+
+    print(f"You have selected {level} difficulty. You will have {chances:,} chances.")
+    if high_score[level] is not None:
+        print(f"Current high score for {level}: {high_score[level]} guesses.")
+    else:
+        print("No high score yet for this level - make one!!")
+    guesses_taken = 0
+    start_time = time.time()  # start timer here
+
+    while chances > 0:
+        guess = int(input("Enter your guess (MUST BE A NUMBER): "))
+        guesses_taken += 1
+
+        if guess == random_int:
+            if high_score[level] is None or guesses_taken < high_score[level]:
+                high_score[level] = guesses_taken
+                print("New high score! Congrats! ")
+            elapsed_time = time.time() - start_time
+            print(f"You guessed the correct number! The number was {random_int}.")
+            print(f"It took you {guesses_taken} guesses and {elapsed_time:.2f} seconds to win!")
+            break
         else:
-            print(f"Incorrect you have {chances:,} chances left!")
-else:
-    print(f"You couldn't guess the correct number! The number was {random_int}")
+            chances -= 1
+            difference = abs(guess - random_int)
+            if difference <= 5:
+                print("Hint: You're very close!")
+            elif guess < random_int:
+                print("Your guess is too low.")
+            else:
+                print("Your guess is too high.")
+            if chances == 1:
+                print("Incorrect — this is your final guess!")
+            elif chances > 1:
+                print(f"Incorrect — you have {chances:,} chances left!")
+            else:
+                print(f"You couldn't guess the correct number! The number was {random_int}.")
+
+    play_again = input("Do you want to play again? Y/N: ").upper()
+    if play_again == "N":
+        break
+
+print("Thank you for playing!")

@@ -1,0 +1,51 @@
+
+import random
+random_int = random.randint(1, 100)
+
+start = \
+    (print("""Welcome to my game!,
+Once we start I'll generate a random number between 1 and 100 which you will guess!,
+You have a set number of chances to guess."""))
+
+difficulty =(input
+             (("""Please select your difficulty level:
+      1) Easy (10 chances)
+      2) Medium (5 chances)
+      3) Hard (3 chances)
+      Enter your choice: """
+               )))
+
+
+if difficulty == "1":
+    chances = 10
+    level = "Easy"
+elif difficulty == "2":
+    chances = 5
+    level = "Medium"
+elif difficulty == "3":
+    chances = 3
+    level = "Hard"
+else:
+    print("Invalid choice! Defaulting to easy mode.")
+    chances = 10
+    level = "Easy"
+
+print(f"You have selected {level} difficulty you will have {chances:,} chances.")
+
+guesses_taken = 0
+
+while chances > 0:
+    guess = int(input("Enter your guess (MUST BE A NUMBER): "))
+    guesses_taken += 1
+    if guess == random_int:
+        print(f"""You guessed the correct number!"""
+        f""" The number was {random_int} It took you {guesses_taken} chances to guess the correct number.""")
+        break
+    else:
+        chances -= 1
+        if chances == 1:
+            print("Incorrect this is your final guess!")
+        else:
+            print(f"Incorrect you have {chances:,} chances left!")
+else:
+    print(f"You couldn't guess the correct number! The number was {random_int}")
